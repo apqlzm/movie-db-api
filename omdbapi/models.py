@@ -1,8 +1,9 @@
 from django.db import models
 
-# TODO:
-# runtime stored as minutes
-# make fields optional instead of title
+
+"""
+Models based on data received from www.omdbapi.com
+"""
 
 
 class Movie(models.Model):
@@ -21,10 +22,13 @@ class Movie(models.Model):
     awards = models.CharField(max_length=200, default='N/A')
     poster = models.CharField(max_length=200, default='N/A')
     metascore = models.IntegerField(default=None)
-    imdbrating = models.DecimalField(decimal_places=1, default=None)
+    imdbrating = models.DecimalField(max_digits=4,
+                                     decimal_places=1,
+                                     default=None)
     imdbvotes = models.IntegerField(default=None)
     imdbid = models.CharField(max_length=20, default='N/A')
-    type_ = models.CharField(max_length=20, default='N/A')
+    type_picture = models.CharField(max_length=20, default='N/A',
+                             verbose_name='type of picture')
     dvd = models.DateField(default=None)
     boxoffice = models.CharField(max_length=20, default='N/A')
     production = models.CharField(max_length=50, default='N/A')
