@@ -8,36 +8,40 @@ Models based on data received from www.omdbapi.com
 
 class Movie(models.Model):
     title = models.CharField(max_length=500)
-    year = models.IntegerField(default=None)
-    rated = models.CharField(max_length=10, default='N/A')
-    released = models.DateField(default=None)
-    runtime = models.IntegerField(default=None)
-    genre = models.CharField(max_length=100, default='N/A')
-    director = models.CharField(max_length=100, default='N/A')
-    writer = models.CharField(max_length=100, default='N/A')
-    actors = models.CharField(max_length=5000, default='N/A')
-    plot = models.TextField()
-    language = models.CharField(max_length=100, default='N/A')
-    country = models.CharField(max_length=100, default='N/A')
-    awards = models.CharField(max_length=200, default='N/A')
-    poster = models.CharField(max_length=200, default='N/A')
-    metascore = models.IntegerField(default=None)
+    year = models.CharField(max_length=20, blank=True)
+    rated = models.CharField(max_length=10, blank=True)
+    released = models.DateField(null=True, blank=True)
+    runtime = models.IntegerField(null=True, blank=True)
+    genre = models.CharField(max_length=100, blank=True)
+    director = models.CharField(max_length=100, blank=True)
+    writer = models.CharField(max_length=100, blank=True)
+    actors = models.CharField(max_length=5000, blank=True)
+    plot = models.TextField(blank=True)
+    language = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
+    awards = models.CharField(max_length=200, blank=True)
+    poster = models.CharField(max_length=200, blank=True)
+    metascore = models.IntegerField(null=True, blank=True)
     imdbrating = models.DecimalField(max_digits=4,
                                      decimal_places=1,
-                                     default=None)
-    imdbvotes = models.IntegerField(default=None)
-    imdbid = models.CharField(max_length=20, default='N/A')
-    type_picture = models.CharField(max_length=20, default='N/A',
-                             verbose_name='type of picture')
-    dvd = models.DateField(default=None)
-    boxoffice = models.CharField(max_length=20, default='N/A')
-    production = models.CharField(max_length=50, default='N/A')
-    website = models.CharField(max_length=200, default='N/A')
+                                     null=True, blank=True)
+    imdbvotes = models.IntegerField(null=True, blank=True)
+    imdbid = models.CharField(max_length=20, blank=True)
+    type_picture = models.CharField(max_length=20, blank=True,
+                                    verbose_name='type')
+    dvd = models.DateField(null=True, blank=True)
+    boxoffice = models.CharField(max_length=20, blank=True)
+    production = models.CharField(max_length=50, blank=True)
+    website = models.CharField(max_length=200, blank=True)
+    totalSeasons = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Rating(models.Model):
-    source = models.CharField(max_length=100, default='N/A')
-    value = models.CharField(max_length=20, default='N/A')
+    source = models.CharField(max_length=100, blank=True)
+    value = models.CharField(max_length=20, blank=True)
     movie = models.ForeignKey(
         'Movie',
         on_delete=models.CASCADE
