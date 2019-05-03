@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional, Tuple, Union
 
 from omdbapi.models import Movie, Rating
-from datetime import datetime
+from datetime import datetime, date
 
 
 RatingData = List[dict]
@@ -9,8 +9,8 @@ MovieData = Dict
 MovieRatingData = Tuple[MovieData, List[dict]]
 
 
-def _to_date(x: str) -> datetime:
-    return datetime.strptime(x, '%d  %b %Y')
+def _to_date(x: str) -> date:
+    return datetime.strptime(x, '%d  %b %Y').date()
 
 
 converters = {
@@ -22,6 +22,8 @@ converters = {
 
 
 def find_movie_in_db(title: str) -> Optional[Movie]:
+    # TODO: doesnt work in some cases, example: "Good Bye Lenin!"
+    # or "harry potter"
     movie = Movie.objects.filter(title__iexact=title)
     if movie:
         return movie[0]
@@ -67,9 +69,12 @@ def _parse_movie_data(movie_data: dict) -> MovieRatingData:
     return parsed_movie_data, parsed_rating_data
 
 
-def create_new_movie(movie_data: dict) -> Movie:
+def create_new_movie(movie_data: dict) -> Optional[Movie]:
     """Create movie and associated ratings
     """
+    if not movie_data:
+        return None
+
     movie_data, rating_data = _parse_movie_data(movie_data)
     movie = Movie(**movie_data)
     movie.save()
@@ -82,18 +87,3 @@ def create_new_movie(movie_data: dict) -> Movie:
 
 def get_all_movies():
     return Movie.objects.all()
-
-
-def get_movie_by_id(movie_id: Union[int, str]):
-    try:
-        movie = Movie.objects.get(id=movie_id)
-    except Movie.DoesNotExist:
-        return None
-    else:
-        return movie
-
-
-def delete_movie_by_id(movie_id: Union[int, str]):
-    movie = get_movie_by_id(movie_id)
-    if movie:
-        movie.delete()

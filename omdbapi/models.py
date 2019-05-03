@@ -14,7 +14,7 @@ class Movie(models.Model):
     runtime = models.IntegerField(null=True, blank=True)
     genre = models.CharField(max_length=100, blank=True)
     director = models.CharField(max_length=100, blank=True)
-    writer = models.CharField(max_length=100, blank=True)
+    writer = models.CharField(max_length=1000, blank=True)
     actors = models.CharField(max_length=5000, blank=True)
     plot = models.TextField(blank=True)
     language = models.CharField(max_length=100, blank=True)

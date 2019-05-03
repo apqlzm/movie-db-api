@@ -11,10 +11,11 @@ class RatingSerializer(serializers.ModelSerializer):
             'source',
             'value',
         )
+        read_only_fields = ('id',)
 
 
 class MovieSerializer(serializers.ModelSerializer):
-    ratings = RatingSerializer(many=True)
+    ratings = RatingSerializer(many=True, read_only=True)
 
     class Meta:
         model = Movie
@@ -46,3 +47,4 @@ class MovieSerializer(serializers.ModelSerializer):
             'totalseasons',
             'ratings'
         )
+        read_only_fields = ('id', 'title',)
