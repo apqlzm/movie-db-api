@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from omdbapi.models import Movie, Rating
 from datetime import datetime
@@ -79,5 +79,21 @@ def create_new_movie(movie_data: dict) -> Movie:
 
     return movie
 
+
 def get_all_movies():
     return Movie.objects.all()
+
+
+def get_movie_by_id(movie_id: Union[int, str]):
+    try:
+        movie = Movie.objects.get(id=movie_id)
+    except Movie.DoesNotExist:
+        return None
+    else:
+        return movie
+
+
+def delete_movie_by_id(movie_id: Union[int, str]):
+    movie = get_movie_by_id(movie_id)
+    if movie:
+        movie.delete()

@@ -7,8 +7,9 @@ from rest_framework.response import Response
 
 from omdbapi.serializers import MovieSerializer
 
-from .utils.crud_helpers import (create_new_movie, find_movie_in_db,
-                                 get_all_movies)
+from .utils.crud_helpers import (create_new_movie, delete_movie_by_id,
+                                 find_movie_in_db, get_all_movies,
+                                 get_movie_by_id)
 from .utils.omdb_data_fetcher import get_movie_data
 
 
@@ -33,3 +34,13 @@ def movies(request):
         all_movies = get_all_movies()
         serializer = MovieSerializer(all_movies, many=True)
         return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def delete_movie(request, movie_id):
+    if request.method == 'DELETE':
+        movie = get_movie_by_id(movie_id)
+        if movie is None:
+            return Response('Movie with given id does not exist')
+        delete_movie_by_id(movie_id)
+        return Response('Movie has been deleted')
