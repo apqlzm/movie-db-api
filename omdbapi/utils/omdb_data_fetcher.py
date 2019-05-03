@@ -5,7 +5,7 @@ OMDB_URL = 'http://www.omdbapi.com/'
 
 
 def get_movie_data(title: str) -> dict:
-    """Download movie data for given title name
+    """Download movie data with given title
     """
     if not title:
         return {}
