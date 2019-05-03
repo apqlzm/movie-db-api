@@ -75,6 +75,9 @@ def create_new_movie(movie_data: dict) -> Movie:
     movie.save()
 
     for rating in rating_data:
-        movie.rating_set.create(**rating)
+        movie.ratings.create(**rating)
 
     return movie
+
+def get_all_movies():
+    return Movie.objects.all()
