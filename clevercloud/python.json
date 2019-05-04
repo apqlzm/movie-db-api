@@ -1,0 +1,8 @@
+{
+    "deploy": {
+        "module": "decathlon_movies_api.wsgi:application",
+        "managetasks": [
+            "migrate"
+        ]
+    }
+}
