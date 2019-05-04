@@ -6,8 +6,8 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from omdbapi.models import Movie
-from omdbapi.serializers import MovieSerializer
+from omdbapi.models import Movie, Comment
+from omdbapi.serializers import MovieSerializer, CommentSerializer
 
 from .utils.crud_helpers import (create_new_movie, find_movie_in_db,
                                  get_all_movies)
@@ -38,7 +38,21 @@ def movies(request):
         return Response(serializer.data)
 
 
-class UpdateDeleteMovie(generics.UpdateAPIView, generics.DestroyAPIView):
+class UpdateDeleteMovieView(generics.RetrieveUpdateDestroyAPIView):
+
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     lookup_url_kwarg = 'movie_id'
+
+
+# class CommentView(generics.ListCreateAPIView):
+class CommentView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        queryset = Comment.objects.all()
+        movie_id = self.request.query_params.get('movie_id')
+        if movie_id is not None:
+            queryset = queryset.filter(movie_id=movie_id)
+        return queryset

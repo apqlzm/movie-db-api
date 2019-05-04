@@ -50,3 +50,15 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'{self.source} ({self.movie.title})'
+
+
+class Comment(models.Model):
+    movie = models.ForeignKey(
+        'Movie',
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    body = models.TextField()
+
+    def __str__(self):
+        return f'comment id: {self.id}, movie {self.movie.title}'

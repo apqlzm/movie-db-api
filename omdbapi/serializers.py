@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Movie, Rating
+from .models import Movie, Rating, Comment
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -48,3 +48,18 @@ class MovieSerializer(serializers.ModelSerializer):
             'ratings'
         )
         read_only_fields = ('id', 'title',)
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    movie_id = serializers.IntegerField()
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'body', 'movie_id')
+        depth = 1
+
+    def validate_movie_id(self, value):
+        movie = Movie.objects.filter(id=value)
+        if not movie:
+            raise serializers.ValidationError('Movie does not exist')
+        return value
