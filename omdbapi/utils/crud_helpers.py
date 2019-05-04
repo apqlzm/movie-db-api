@@ -1,8 +1,8 @@
+from collections import Counter
+from datetime import date, datetime
 from typing import Dict, List, Optional, Tuple, Union
 
-from omdbapi.models import Movie, Rating
-from datetime import datetime, date
-
+from omdbapi.models import Comment, Movie, Rating
 
 RatingData = List[dict]
 MovieData = Dict
@@ -87,3 +87,34 @@ def create_new_movie(movie_data: dict) -> Optional[Movie]:
 
 def get_all_movies():
     return Movie.objects.all()
+
+
+def _serialize_top_list(counter: Counter) -> List[dict]:
+    """Movie ranking based on counter data
+    """
+    output = []
+    last_quantity = -1
+    current_rank = 0
+
+    for movie_id, quantity in counter.most_common():
+        if last_quantity != quantity:
+            last_quantity = quantity
+            current_rank += 1
+
+        output.append({
+            'movie_id': movie_id,
+            'total_comments': quantity,
+            'rank': current_rank
+        })
+
+    return output
+
+
+def prepare_top_list(date_from: datetime, date_to: datetime) -> List[dict]:
+    comments = Comment.objects.filter(
+        date_created__date__gte=date_from.date()
+    ).filter(
+        date_created__date__lte=date_to.date()
+    )
+    counter = Counter([c.movie_id for c in comments])
+    return _serialize_top_list(counter)

@@ -59,6 +59,7 @@ class Comment(models.Model):
         related_name='comments'
     )
     body = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'comment id: {self.id}, movie {self.movie.title}'
