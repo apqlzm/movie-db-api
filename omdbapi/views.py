@@ -34,7 +34,7 @@ def movies(request):
         movie = create_new_movie(movie_data)
 
         serializer = MovieSerializer(movie)
-        return Response(serializer.data)
+        return Response(serializer.data, status=201)
 
     elif request.method == 'GET':
         all_movies = get_all_movies()
