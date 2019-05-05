@@ -20,12 +20,18 @@ def movies(request):
             return HttpResponseBadRequest({'title is required'})
 
         title = request.data['title']
-        movie = find_movie_in_db(title)
-        if not movie:
-            movie_data = get_movie_data(title)
-            if movie_data == {}:
-                return HttpResponseNotFound('Movie could not be fetched from external database')
-            movie = create_new_movie(movie_data)
+        movie_data = get_movie_data(title)
+        if movie_data == {}:
+            return HttpResponseNotFound('Movie could not be fetched from external database')
+
+        imdb_id = movie_data.get('imdbID')
+
+        movie = find_movie_in_db(imdb_id=imdb_id)
+
+        if movie:
+            return Response('Movie already in database', status=201)
+        
+        movie = create_new_movie(movie_data)
 
         serializer = MovieSerializer(movie)
         return Response(serializer.data)

@@ -21,10 +21,8 @@ converters = {
 }
 
 
-def find_movie_in_db(title: str) -> Optional[Movie]:
-    # TODO: doesnt work in some cases, example: "Good Bye Lenin!"
-    # or "harry potter"
-    movie = Movie.objects.filter(title__iexact=title)
+def find_movie_in_db(imdb_id: str) -> Optional[Movie]:
+    movie = Movie.objects.filter(imdbid=imdb_id)
     if movie:
         return movie[0]
     return None
