@@ -1,4 +1,4 @@
-Django==2.2.10
+Django==2.2.13
 djangorestframework==3.9.3
 requests==2.20.0 # used for getting data from http://www.omdbapi.com
 psycopg2>=2.7 --no-binary psycopg2 # production database
